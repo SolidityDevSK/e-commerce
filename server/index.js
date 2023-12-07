@@ -4,22 +4,26 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 const db = require("./config/db");
-const product = require("./routes/productRouter");
+const productRouter = require("./routes/productRouter");
+
+const cloudinary = require("cloudinary").v2;
 
 const app = express();
 
 dotenv.config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "30mb", extended: true }));
 app.use(bodyParser.urlencoded({ limit: "30mb", extended: true }));
 app.use(cookieParser());
 
-app.use(product);
-
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "Hello there" });
-});
+app.use("/", productRouter);
 
 db();
 
