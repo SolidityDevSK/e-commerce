@@ -1,13 +1,7 @@
 const Product = require("../models/productSchema.js");
-const ProductFilter = require("../utils/productFilter.js");
 
 const allProducts = async (req, res) => {
-  const resultPerPage = 10;
-  const productFilter = new ProductFilter(Product.find(), req.query)
-    .search()
-    .filter()
-    .pegination(resultPerPage);
-  const products = await productFilter.query;
+  const products = await Product.find();
 
   res.status(200).json({
     products,
